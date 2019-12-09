@@ -1,6 +1,14 @@
-const exec = require("child_process").exec
-const pathModule = require("path")
 
-var toolsetDir = pathModule.resolve(process.cwd(), "toolset")
-var scriptPath = pathModule.resolve(toolsetDir, "prepareThingyForCli.pl")
-exec(scriptPath, {cwd:toolsetDir}, (err, out, stderr) => console.log(out + "\nindividualized cli!"))
+const pathModule = require("path")
+const fs = require("fs")
+
+const packagePath = pathModule.resolve(process.cwd(), "ressources", "package.json")
+const package = require(packagePath)
+const thingyPath = pathModule.resolve(process.cwd(), "..")
+const name = pathModule.basename(thingyPath)
+package.name = name
+package.bin = {}
+package.bin[name] = "./index.js"
+packageString = JSON.stringify(package, null, 2)
+fs.writeFileSync(packagePath, packageString)
+console.log("individualized clisources!") 
